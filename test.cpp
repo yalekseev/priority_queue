@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main() {
-    priority_queue<int> pq;
+    util::priority_queue<int> pq;
 
     pq.push(3);
     pq.push(1);

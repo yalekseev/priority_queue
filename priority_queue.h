@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <vector>
 
+namespace util {
+
 template <typename T, typename Cmp = std::less<T>>
 class priority_queue {
 public:
@@ -91,3 +93,5 @@ private:
     int m_queue_size = 0;
     std::vector<T> m_heap;
 };
+
+} // namespace util
