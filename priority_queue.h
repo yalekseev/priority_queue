@@ -17,20 +17,21 @@ public:
     }
 
     void pop() {
-        int i = m_queue_size - 1;
-        std::swap(m_heap[0], m_heap[i]);
+        int last_leaf = m_queue_size - 1;
+        std::swap(m_heap[0], m_heap[last_leaf]);
         --m_queue_size;
         sift_down(0);
     }
 
-    void push(const T &t) {
+    template <typename V>
+    void push(V &&v) {
         if (m_queue_size == m_heap.size()) {
-            m_heap.push_back(t);
-            ++m_queue_size;
+            m_heap.push_back(std::forward<V>(v));
         } else {
-            m_heap[m_queue_size] = t;
-            ++m_queue_size;
+            m_heap[m_queue_size] = std::forward<V>(v);
         }
+
+        ++m_queue_size;
 
         sift_up(m_queue_size - 1);
     }
