@@ -1,11 +1,3 @@
-# priority_queue
-Simple priority queue
-
-Usage
-=====
-
-```cpp
-
 #include "priority_queue.h"
 
 #include <iostream>
@@ -27,5 +19,3 @@ int main() {
 
     return 0;
 }
-
-```
