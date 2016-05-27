@@ -46,30 +46,40 @@ public:
 
 private:
     void sift_up(int i) {
-        int p = parent(i);
+        while (true) {
+            int p = parent(i);
 
-        while (p >= 0 && m_cmp(m_heap[p], m_heap[i])) {
-            std::swap(m_heap[p], m_heap[i]);
-            sift_up(p);
+            if (p >= 0 && p < m_size && m_cmp(m_heap[p], m_heap[i])) {
+                std::swap(m_heap[p], m_heap[i]);
+                i = p;
+            } else {
+                break;
+            }
         }
     }
 
     void sift_down(int i) {
-        int left = left_child(i);
-        int right = right_child(i);
+        while (true) {
+            int left = left_child(i);
+            int right = right_child(i);
 
-        int max = i;
-        if (left < m_size && m_cmp(m_heap[max], m_heap[left])) {
-            max = left;
-        }
+            int max = i;
 
-        if (right < m_size && m_cmp(m_heap[max], m_heap[right])) {
-            max = right;
-        }
+            if (left < m_size && m_cmp(m_heap[max], m_heap[left])) {
+                max = left;
+            }
 
-        if (max != i) {
+            if (right < m_size && m_cmp(m_heap[max], m_heap[right])) {
+                max = right;
+            }
+
+            if (max == i) {
+                break;
+            }
+
             std::swap(m_heap[i], m_heap[max]);
-            sift_down(max);
+
+            i = max;
         }
     }
 
