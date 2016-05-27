@@ -17,31 +17,24 @@ public:
     }
 
     void pop() {
-        int last_leaf = m_size - 1;
+        int last_leaf = m_heap.size() - 1;
         std::swap(m_heap[0], m_heap[last_leaf]);
-        --m_size;
+        m_heap.pop_back();
         sift_down(0);
     }
 
     template <typename V>
     void push(V &&v) {
-        if (m_size == m_heap.size()) {
-            m_heap.push_back(std::forward<V>(v));
-        } else {
-            m_heap[m_size] = std::forward<V>(v);
-        }
-
-        ++m_size;
-
-        sift_up(m_size - 1);
+        m_heap.push_back(std::forward<V>(v));
+        sift_up(m_heap.size() - 1);
     }
 
     size_t size() const {
-        return m_size;
+        return m_heap.size();
     }
 
     bool empty() const {
-        return m_size == 0;
+        return m_heap.empty();
     }
 
 private:
@@ -49,7 +42,7 @@ private:
         while (true) {
             int p = parent(i);
 
-            if (p >= 0 && p < m_size && m_cmp(m_heap[p], m_heap[i])) {
+            if (p >= 0 && m_cmp(m_heap[p], m_heap[i])) {
                 std::swap(m_heap[p], m_heap[i]);
                 i = p;
             } else {
@@ -65,11 +58,11 @@ private:
 
             int max = i;
 
-            if (left < m_size && m_cmp(m_heap[max], m_heap[left])) {
+            if (left < m_heap.size() && m_cmp(m_heap[max], m_heap[left])) {
                 max = left;
             }
 
-            if (right < m_size && m_cmp(m_heap[max], m_heap[right])) {
+            if (right < m_heap.size() && m_cmp(m_heap[max], m_heap[right])) {
                 max = right;
             }
 
@@ -97,7 +90,6 @@ private:
 
 private:
     Cmp m_cmp;
-    int m_size = 0;
     std::vector<T> m_heap;
 };
 
