@@ -8,17 +8,21 @@ namespace util {
 template <typename T, typename Cmp = std::less<T>>
 class priority_queue {
 public:
+    using container_type = std::vector<T>;
+    using value_type = typename container_type::value_type;
+
+public:
     T& top() {
-        return m_heap[0];
+        return m_heap.front();
     }
 
     const T& top() const {
-        return m_heap[0];
+        return m_heap.front();
     }
 
     void pop() {
         int last_leaf = m_heap.size() - 1;
-        std::swap(m_heap[0], m_heap[last_leaf]);
+        std::swap(m_heap.front(), m_heap[last_leaf]);
         m_heap.pop_back();
         sift_down(0);
     }
@@ -29,12 +33,22 @@ public:
         sift_up(m_heap.size() - 1);
     }
 
+    template <typename... Args>
+    void emplace(Args&&... args) {
+        m_heap.emplace_back(std::forward<Args>(args)...);
+    }
+
     size_t size() const {
         return m_heap.size();
     }
 
     bool empty() const {
         return m_heap.empty();
+    }
+
+    void swap(priority_queue &other) {
+        std::swap(m_heap, other.m_heap);
+        std::swap(m_cmp, other.m_cmp);
     }
 
 private:
@@ -90,7 +104,7 @@ private:
 
 private:
     Cmp m_cmp;
-    std::vector<T> m_heap;
+    container_type m_heap;
 };
 
 } // namespace util
