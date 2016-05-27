@@ -17,31 +17,31 @@ public:
     }
 
     void pop() {
-        int last_leaf = m_queue_size - 1;
+        int last_leaf = m_size - 1;
         std::swap(m_heap[0], m_heap[last_leaf]);
-        --m_queue_size;
+        --m_size;
         sift_down(0);
     }
 
     template <typename V>
     void push(V &&v) {
-        if (m_queue_size == m_heap.size()) {
+        if (m_size == m_heap.size()) {
             m_heap.push_back(std::forward<V>(v));
         } else {
-            m_heap[m_queue_size] = std::forward<V>(v);
+            m_heap[m_size] = std::forward<V>(v);
         }
 
-        ++m_queue_size;
+        ++m_size;
 
-        sift_up(m_queue_size - 1);
+        sift_up(m_size - 1);
     }
 
     size_t size() const {
-        return m_queue_size;
+        return m_size;
     }
 
     bool empty() const {
-        return m_queue_size == 0;
+        return m_size == 0;
     }
 
 private:
@@ -58,22 +58,18 @@ private:
         int left = left_child(i);
         int right = right_child(i);
 
-        if (left < m_queue_size && right < m_queue_size) {
-            int max = left;
-            if (m_cmp(m_heap[max], m_heap[right])) {
-                max = right;
-            }
+        int max = i;
+        if (left < m_size && m_cmp(m_heap[max], m_heap[left])) {
+            max = left;
+        }
 
-            if (m_cmp(m_heap[i], m_heap[max])) {
-                std::swap(m_heap[i], m_heap[max]);
-                sift_down(max);
-            }
-        } else if (left < m_queue_size && m_cmp(m_heap[i], m_heap[left])) {
-            std::swap(m_heap[i], m_heap[left]);
-            sift_down(left);
-        } else if (right < m_queue_size && m_cmp(m_heap[i], m_heap[right])) {
-            std::swap(m_heap[i], m_heap[right]);
-            sift_down(right);
+        if (right < m_size && m_cmp(m_heap[max], m_heap[right])) {
+            max = right;
+        }
+
+        if (max != i) {
+            std::swap(m_heap[i], m_heap[max]);
+            sift_down(max);
         }
     }
 
@@ -91,7 +87,7 @@ private:
 
 private:
     Cmp m_cmp;
-    int m_queue_size = 0;
+    int m_size = 0;
     std::vector<T> m_heap;
 };
 
