@@ -53,13 +53,16 @@ public:
 
 private:
     void sift_up(int i) {
+        T t(std::move(m_heap[i]));
+
         while (true) {
             int p = parent(i);
 
-            if (p >= 0 && m_cmp(m_heap[p], m_heap[i])) {
-                std::swap(m_heap[p], m_heap[i]);
+            if (i > 0 && m_cmp(m_heap[p], t)) {
+                m_heap[i] = std::move(m_heap[p]);
                 i = p;
             } else {
+                m_heap[i] = std::move(t);
                 break;
             }
         }
